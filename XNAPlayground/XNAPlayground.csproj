@@ -12,11 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Assets/Sprites/*" />
+    <Content Remove="GameContent/*.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets/Sprites/*" />
+    <EmbeddedResource Include="GameContent/*.png" />
   </ItemGroup>
 
 </Project>

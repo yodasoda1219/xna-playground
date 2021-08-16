@@ -8,10 +8,14 @@ namespace XNAPlayground
 {
     public class XNAPlaygroundGame : Game
     {
+        public static AssetManager AssetManager => mInstance.mAssetManager;
+        static XNAPlaygroundGame()
+        {
+            mInstance = new XNAPlaygroundGame();
+        }
         public static void Main(string[] args)
         {
-            using var game = new XNAPlaygroundGame();
-            game.Run();
+            mInstance.Run();
         }
         private XNAPlaygroundGame()
         {
@@ -20,51 +24,12 @@ namespace XNAPlayground
             gdm.PreferredBackBufferHeight = 600;
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
-            string assetDirectory = "Content";
-            ExtractResources(assetDirectory);
-            Content.RootDirectory = assetDirectory;
-        }
-        private void ExtractResources(string assetDirectory)
-        {
-            var assembly = GetType().Assembly;
-            var names = assembly.GetManifestResourceNames();
-            foreach (string name in names)
-            {
-                var sections = name.Split('.');
-                if (sections.Length < 3)
-                {
-                    continue;
-                }
-                string assetPath = assetDirectory;
-                for (int i = 2; i < sections.Length; i++)
-                {
-                    if (i != sections.Length - 1)
-                    {
-                        assetPath = Path.Join(assetPath, sections[i]);
-                    }
-                    else
-                    {
-                        assetPath += "." + sections[i];
-                    }
-                }
-                Directory.CreateDirectory(Path.GetDirectoryName(assetPath) ?? ".");
-                var fileStream = new FileStream(Path.Join(".", assetPath), FileMode.Create);
-                Stream? resourceStream = assembly.GetManifestResourceStream(name);
-                if (resourceStream == null)
-                {
-                    throw new NullReferenceException();
-                }
-                var buffer = new byte[resourceStream.Length];
-                resourceStream.Read(buffer);
-                fileStream.Write(buffer);
-                resourceStream.Close();
-                fileStream.Close();
-            }
+            mAssetManager = new AssetManager(this, "Content");
         }
         protected override void LoadContent()
         {
             mBatch = new SpriteBatch(GraphicsDevice);
-            mSprite = Content.Load<Texture2D>("Sprites/PlaceholderSprite.png");
+            mSprite = Content.Load<Texture2D>("XNAPlayground/Assets/Sprites/PlaceholderSprite.png");
         }
         protected override void UnloadContent()
         {
@@ -83,6 +48,8 @@ namespace XNAPlayground
             mBatch?.End();
             base.Draw(gameTime);
         }
+        private static XNAPlaygroundGame mInstance;
+        private AssetManager mAssetManager;
         private SpriteBatch? mBatch;
         private Texture2D? mSprite;
     }
