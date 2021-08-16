@@ -57,6 +57,25 @@ namespace XNAPlayground
         {
             return GetAssetName(typeof(T));
         }
+        public T Load<T>(string name)
+        {
+            try
+            {
+                return mContentManager.Load<T>(name);
+            }
+            catch (ContentLoadException)
+            {
+                throw new ArgumentException($"Could not load asset: {name}");
+            }
+        }
+        public T Load<T>(Type type)
+        {
+            return Load<T>(GetAssetName(type));
+        }
+        public T Load<T, A>()
+        {
+            return Load<T>(typeof(A));
+        }
         private ContentManager mContentManager;
         public ContentManager Assets => mContentManager;
     }

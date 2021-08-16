@@ -1,6 +1,6 @@
 # Notes
 ## Color palette
-- 0x2b061e - dark purple
+- 2b061e - dark purple
 - d81159 - ruby
 - eef0f2 - white
 - 4d7298 - light blue

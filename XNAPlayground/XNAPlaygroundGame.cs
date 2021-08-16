@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using XNAPlayground.Engine;
 
 namespace XNAPlayground
 {
     public class XNAPlaygroundGame : Game
     {
         public static AssetManager AssetManager => mInstance.mAssetManager;
+        public static Scene Scene => mInstance.mScene;
         static XNAPlaygroundGame()
         {
             mInstance = new XNAPlaygroundGame();
@@ -25,32 +24,40 @@ namespace XNAPlayground
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             mAssetManager = new AssetManager(this, "Content");
+            mScene = new Scene();
         }
         protected override void LoadContent()
         {
             mBatch = new SpriteBatch(GraphicsDevice);
-            mSprite = Content.Load<Texture2D>("XNAPlayground/Assets/Sprites/PlaceholderSprite.png");
         }
         protected override void UnloadContent()
         {
             mBatch?.Dispose();
-            mSprite?.Dispose();
         }
         protected override void Update(GameTime gameTime)
         {
-            // todo: take input
+            foreach (Entity entity in mScene)
+            {
+                entity.Update(gameTime);
+            }
         }
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(0f, 1f, 0f));
-            mBatch?.Begin();
-            mBatch?.Draw(mSprite ?? throw new NullReferenceException(), Vector2.Zero, Color.White);
-            mBatch?.End();
+            GraphicsDevice.Clear(new Color(43, 6, 30));
+            if (mBatch != null)
+            {
+                mBatch.Begin();
+                foreach (Entity entity in mScene)
+                {
+                    entity.Render(mBatch, gameTime);
+                }
+                mBatch.End();
+            }
             base.Draw(gameTime);
         }
         private static XNAPlaygroundGame mInstance;
         private AssetManager mAssetManager;
+        private Scene mScene;
         private SpriteBatch? mBatch;
-        private Texture2D? mSprite;
     }
 }
