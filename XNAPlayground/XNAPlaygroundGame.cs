@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using XNAPlayground.Engine;
+using XNAPlayground.GameContent;
 
 namespace XNAPlayground
 {
     public class XNAPlaygroundGame : Game
     {
         public static AssetManager AssetManager => mInstance.mAssetManager;
+        public static InputManager InputManager => mInstance.mInputManager;
         public static Scene Scene => mInstance.mScene;
         static XNAPlaygroundGame()
         {
@@ -24,11 +26,13 @@ namespace XNAPlayground
             gdm.IsFullScreen = false;
             gdm.SynchronizeWithVerticalRetrace = true;
             mAssetManager = new AssetManager(this, "Content");
+            mInputManager = new InputManager();
             mScene = new Scene();
         }
         protected override void LoadContent()
         {
             mBatch = new SpriteBatch(GraphicsDevice);
+            mScene.Add(new Player());
         }
         protected override void UnloadContent()
         {
@@ -36,6 +40,7 @@ namespace XNAPlayground
         }
         protected override void Update(GameTime gameTime)
         {
+            mInputManager.Update();
             foreach (Entity entity in mScene)
             {
                 entity.Update(gameTime);
@@ -43,7 +48,7 @@ namespace XNAPlayground
         }
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(43, 6, 30));
+            GraphicsDevice.Clear(new Color(54, 85, 143));
             if (mBatch != null)
             {
                 mBatch.Begin();
@@ -57,6 +62,7 @@ namespace XNAPlayground
         }
         private static XNAPlaygroundGame mInstance;
         private AssetManager mAssetManager;
+        private InputManager mInputManager;
         private Scene mScene;
         private SpriteBatch? mBatch;
     }

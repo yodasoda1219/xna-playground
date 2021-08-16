@@ -6,10 +6,10 @@ namespace XNAPlayground.Engine
 {
     public abstract class Entity
     {
-        public Entity()
+        public Entity(Vector2? position = null)
         {
             mSprite = LoadSprite();
-            mPosition = Vector2.Zero;
+            mPosition = position ?? Vector2.Zero;
         }
         ~Entity()
         {

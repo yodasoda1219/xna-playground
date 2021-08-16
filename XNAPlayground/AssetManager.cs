@@ -7,7 +7,7 @@ namespace XNAPlayground
 {
     public class AssetManager
     {
-        public AssetManager(XNAPlaygroundGame game, string assetDirectory = "Content")
+        internal AssetManager(XNAPlaygroundGame game, string assetDirectory = "Content")
         {
             mContentManager = game.Content;
             ExtractResources(assetDirectory);
