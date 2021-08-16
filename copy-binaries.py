@@ -20,10 +20,13 @@ tar.extractall(tempdir_path)
 binaries_path = path.join(tempdir_path, binary_directory)
 if platform_name == "Linux":
     destination = "/usr/lib64"
-    print(f"Copying binaries into {destination}")
     for entry in os.scandir(binaries_path):
-        subprocess.call(["sudo", "cp", "-rf", entry.path, destination])
+        if not path.exists(path.join(destination, entry.name)):
+            print(f"Copying {entry.name} into {destination}")
+            subprocess.call(["sudo", "cp", "-rf", entry.path, destination])
 else:
     destination = path.join("XNAPlayground", "bin", "Debug", "net5.0")
+    print(f"Copying FNA binaries into {destination}")
     shutil.copytree(binaries_path, destination, dirs_exist_ok=True)
+print("Finished copying binaries")
 tempdir.cleanup()

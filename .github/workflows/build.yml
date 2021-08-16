@@ -1,0 +1,25 @@
+name: build
+on: [ push ]
+jobs:
+  build:
+    runs-on: ${{ matrix.os-name }}-latest
+    strategy:
+      matrix:
+        os-name: [ macos, ubuntu, windows ]
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.6
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: build
+        shell: bash
+        run: |
+          make -C ${{ github.workspace }}
