@@ -22,4 +22,5 @@ jobs:
       - name: build
         shell: bash
         run: |
-          make -C ${{ github.workspace }}
+          dotnet build
+          python copy-binaries.py
